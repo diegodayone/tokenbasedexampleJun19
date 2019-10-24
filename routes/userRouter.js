@@ -21,6 +21,28 @@ router.post("/signup", async (req, res) => {
     }
 })
 
+router.post("/login", passport.authenticate("local"), (req, res)=>{
+    var token = createToken({ _id : req.user._id, username: req.user.username, email: req.user.email})
+    res.send({
+        success: true,
+        username: req.user.username,
+        email: req.user.email,
+        token: token
+    })
+})
+
+//1) verify the current token
+router.post("/refresh", passport.authenticate("jwt"), (req, res)=>{
+    //2) create the new token
+    var token = createToken({ _id: req.user._id, username: req.user.username});
+    //3) send back the new token
+    res.send({
+        success:true,
+        username: req.user.username,
+        token: token
+    })
+})
+
 router.post("/verifyCredentials", passport.authenticate("local"), (req, res)=>{
     var token = createToken({ _id : req.user._id, username: req.user.username, email: req.user.email})
     res.send({
@@ -38,8 +60,6 @@ router.post("/verifyCredentials", passport.authenticate("local"), (req, res)=>{
 router.post("/verifyToken", passport.authenticate("jwt"), (req,res)=>{
     res.send(req.user)
 })
-
-
 
 module.exports = router;
 

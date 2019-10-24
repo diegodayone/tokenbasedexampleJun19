@@ -33,5 +33,5 @@ module.exports = {
             res.send("this method works for admin only")
         }
     },
-    token: passport.authenticate("jwt")
+    token: passport.authenticate("jwt", { session: false })
 }
