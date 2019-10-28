@@ -18,6 +18,7 @@ err =>{
 })
 
 var server = express()
+server.set("port", process.env.PORT || 3333);
 server.use(cors())
 server.use(express.json()) //equal to body-parser
 server.use(passport.initialize())
@@ -30,6 +31,6 @@ server.get("/", (req, res) => {
     res.send("Hello")
 })
 
-server.listen(3333, () => {
+server.listen(server.get("port"), () => {
     console.log("Server is listening on port 3333")
 })
